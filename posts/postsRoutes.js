@@ -96,18 +96,46 @@ router.post('/:id/comments', (req, res) => {
         if (comment) {
           res.status(201).json(comment);
         } else {
-          res.status(404).json({
+          res.status(500).json({
             error: 'There was an error while saving the comment to the database'
           });
         }
       })
       .catch(err => {
-        res.status(500).json({
+        res.status(404).json({
           success: false,
           message: 'The post with the specified ID does not exist.'
         });
       });
   }
+});
+
+// DELETE post
+
+router.delete('/:id', (req, res) => {
+  Posts.findById(req.params.id)
+
+    .then(post => {
+      if (post[0].id == req.params.id) {
+        const deletedpost = post;
+        Posts.remove(req.params.id)
+          .then(() => {
+            res.status(200).json(deletedpost);
+          })
+          .catch(err => {
+            res.status(500).json({ error: 'The post could not be removed' });
+          });
+      } else {
+        res
+          .status(404)
+          .json({ message: 'The post with the specified does not exist.' });
+      }
+    })
+    .catch(() => {
+      res
+        .status(404)
+        .json({ message: 'The post with the specified does not exist.' });
+    });
 });
 
 module.exports = router;
