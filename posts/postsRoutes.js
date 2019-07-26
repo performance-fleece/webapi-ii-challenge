@@ -134,7 +134,7 @@ router.delete('/:id', (req, res) => {
     .catch(() => {
       res
         .status(404)
-        .json({ message: 'The post with the specified does not exist.' });
+        .json({ message: 'The post with the specified ID does not exist.' });
     });
 });
 
