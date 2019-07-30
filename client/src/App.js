@@ -1,26 +1,33 @@
 import React from 'react';
-import logo from './logo.svg';
+// import logo from './logo.svg';
 import './App.css';
+import { connect } from 'react-redux';
+import { fetchPosts } from './actions';
+import NavBar from './components/NavBar';
+import PostList from './components/PostList';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
+
+  componentDidMount() {
+    this.props.fetchPosts();
+  }
+  render() {
+    return (
+      <div className="App">
+        <NavBar />
+        <PostList posts={this.props.posts} />
+      </div>
+    );
+  }
 }
 
-export default App;
+const mapStateToProps = ({ posts }) => ({ posts });
+
+export default connect(
+  mapStateToProps,
+  { fetchPosts }
+)(App);
